@@ -5,7 +5,7 @@ function App() {
   return (
     <>
       <MainLayout>
-        {/* <Outlet></Outlet> */}
+        <Outlet></Outlet>
       </MainLayout>
     </>
   );
