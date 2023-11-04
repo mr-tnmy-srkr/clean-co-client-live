@@ -18,7 +18,7 @@ const Login = () => {
 
     try {
       const user = await login(email, password);
-      // console.log(user);
+      console.log(user);
       console.log(user.user.email);
       const res = await axios.post("/auth/access-token", {
         email: user.user.email,
