@@ -4,10 +4,12 @@ import useAuth from "../hooks/useAuth";
 import { useState } from "react";
 import useAxios from "../hooks/useAxios";
 import { useParams } from "react-router-dom";
+// import { auth } from "../config/firebase.config";
 
 const Booking = () => {
   const { user } = useAuth();
-  // console.log(user);
+  // console.log(user.email);
+  // console.log(auth.currentUser.email);
   const [customerName, setCustomerName] = useState("");
   const [email, setEmail] = useState("");
   const [date, setDate] = useState("");
