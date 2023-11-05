@@ -37,7 +37,6 @@ const Services = () => {
     error,
     isLoading,
     isError,
-    refetch,
   } = useQuery({
     queryKey: ["service", price, category,page], //eta somehow dependency hisabe kaj kore price/category/page change hole refetch hbe
     queryFn: getServices, //data jeta fetch kore anbe

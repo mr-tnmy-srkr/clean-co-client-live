@@ -1,40 +1,70 @@
-import Container from '../components/ui/Container';
-import useAuth from '../hooks/useAuth';
-import { useState } from 'react';
+import { useMutation, useQuery } from "@tanstack/react-query";
+import Container from "../components/ui/Container";
+import useAuth from "../hooks/useAuth";
+import { useState } from "react";
+import useAxios from "../hooks/useAxios";
+import { useParams } from "react-router-dom";
 
 const Booking = () => {
   const { user } = useAuth();
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [date, setDate] = useState('');
-  const [timeSlot, setTimeSlot] = useState('');
-  const [address, setAddress] = useState('');
+  // console.log(user);
+  const [customerName, setCustomerName] = useState("");
+  const [email, setEmail] = useState("");
+  const [date, setDate] = useState("");
+  const [timeSlot, setTimeSlot] = useState("");
+  const [address, setAddress] = useState("");
+  const axios = useAxios();
 
-  const handleSubmit = (e) => {
+  const { id } = useParams();
+  // console.log(id);
+  const { data: service } = useQuery({
+    queryKey: ["booking"],
+    queryFn: async () => {
+      const res = await axios.get(`/services/${id}`);
+      return res;
+    },
+  });
+  // console.log(service.data);
+
+  /*   const handleSubmit = (e) => {
     e.preventDefault();
 
     const data = { name, email, date, timeSlot, address };
     console.log(data);
   };
+ */
+  const { mutate } = useMutation({
+    mutationKey: ["booking"],
+    mutationFn: async (bookingData) => {
+      return axios.post("/user/create-booking", bookingData);
+    },
+  });
 
   return (
     <Container className="my-40">
       <div className="flex">
         <div className="flex-1 flex flex-col justify-between">
           <div>
-            <h1 className="text-3xl font-bold">Service Name</h1>
-            <p className="max-w-[60ch] text-xl mt-5">Service Description</p>
-            <div className="space-y-4 mt-10">Features</div>
+            <h1 className="text-3xl font-bold">{service?.data?.name}</h1>
+            <p className="max-w-[60ch] text-xl mt-5">
+              {service?.data?.description}
+            </p>
+            <div className="space-y-4 mt-10">
+              {service?.data?.features?.map((item, idx) => (
+                <p key={idx}>{item}</p>
+              ))}
+            </div>
           </div>
           <div>
             <div className="divider max-w-2xl"></div>
             <p className="text-4xl font-semibold">
-              100$ <span className="text-xs">vat included</span>{' '}
+              ${service?.data?.price}{" "}
+              <span className="text-xs">vat included</span>{" "}
             </p>
           </div>
         </div>
         <div className="card w-full max-w-md shadow-2xl bg-base-100">
-          <form className="card-body" onSubmit={handleSubmit}>
+          <form className="card-body">
             <div className="form-control">
               <label className="label">
                 <span className="label-text">Name</span>
@@ -44,7 +74,7 @@ const Booking = () => {
                 placeholder="name"
                 className="input input-bordered"
                 required
-                onBlur={(e) => setName(e.target.value)}
+                onBlur={(e) => setCustomerName(e.target.value)}
               />
             </div>
             <div className="form-control">
@@ -95,7 +125,23 @@ const Booking = () => {
             </div>
 
             <div className="form-control mt-2">
-              <button className="btn btn-primary">Book</button>
+              <button
+              type="button"
+                onClick={() =>
+                  mutate({
+                    customerName,
+                    email,
+                    date,
+                    timeSlot,
+                    address,
+                    service: service?.data?.name,
+                    status: "pending",
+                  })
+                }
+                className="btn btn-primary"
+              >
+                Book
+              </button>
             </div>
           </form>
         </div>
