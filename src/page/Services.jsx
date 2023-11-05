@@ -5,6 +5,7 @@ import useAxios from "../hooks/useAxios";
 import ServiceCard from "../components/ServiceCard";
 import { useState } from "react";
 import { capitalizeWords } from "../utils/Capitalize";
+import { GrNext, GrPrevious } from "react-icons/gr";
 
 const categories = [
   "landscaping",
@@ -17,6 +18,9 @@ const Services = () => {
   const axios = useAxios();
   const [price, setPrice] = useState("");
   const [category, setCategory] = useState("");
+  const [page, setPage] = useState(1);
+  const limit = 9;
+
   // console.log(category);
   // console.log(price);
   const getServices = async () => {
@@ -33,6 +37,7 @@ const Services = () => {
     error,
     isLoading,
     isError,
+    refetch,
   } = useQuery({
     queryKey: ["service", price, category], //eta somehow dependency hisabe kaj kore price/category change hole refetch hbe
     queryFn: getServices, //data jeta fetch kore anbe
@@ -50,6 +55,17 @@ const Services = () => {
   }
   // console.log(status);
   // console.log(services?.data?.total);
+  const totalPage = Math.ceil(services?.data?.total / limit);
+
+  const handlePrev = () => {
+    page > 1 && setPage(page - 1);
+  };
+  const handleNext = () => {
+    page < totalPage && setPage(page + 1);
+  };
+  console.log(page);
+
+  // console.log(totalPage);
   return (
     <>
       <Container className="mt-10">
@@ -107,21 +123,48 @@ const Services = () => {
       </Container>
 
       <Container className="mb-64">
-        {isLoading ? <p>Loading....</p> :
-        <div className="grid grid-cols-3 gap-10">
-          {/* Service Cards goes here */}
-          {services?.data?.result.map((item) => (
-            <ServiceCard key={item._id} service={item}></ServiceCard>
-          ))}
-        </div>}
+        {isLoading ? (
+          <p>Loading....</p>
+        ) : (
+          <div className="grid grid-cols-3 gap-10">
+            {/* Service Cards goes here */}
+            {services?.data?.result.map((item) => (
+              <ServiceCard key={item._id} service={item}></ServiceCard>
+            ))}
+          </div>
+        )}
       </Container>
       <Container className="mb-16 -mt-48 flex justify-end">
         <div className="join border-2 border-primary">
-          <button className="join-item btn btn-ghost">Prev</button>
-          <button className="join-item btn btn-ghost">2</button>
-          <button className="join-item btn  btn-ghost">3</button>
-          <button className="join-item btn btn-ghost">4</button>
-          <button className="join-item btn btn-ghost">Next</button>
+          <button onClick={handlePrev} className="join-item btn btn-ghost">
+            <GrPrevious></GrPrevious>
+          </button>
+          {isLoading ? (
+            <p>Loading....</p>
+          ) : (
+            [...Array(totalPage).keys()].map((item, idx) => {
+              const pageNumber = idx + 1;
+              return (
+                <button
+                  onClick={() => setPage(pageNumber)}
+                  key={pageNumber}
+                  className={`${
+                    pageNumber === page
+                      ? "join-item btn btn-primary"
+                      : "join-item btn btn-ghost"
+                  }`}
+                >
+                  {pageNumber}
+                </button>
+              );
+            })
+          )}
+          {/* <button className="join-item btn btn-ghost">1</button> */}
+          {/* <button className="join-item btn btn-ghost">2</button> */}
+          {/* <button className="join-item btn btn-ghost">3</button> */}
+          <button onClick={handleNext} className="join-item btn btn-ghost">
+            <GrNext></GrNext>
+          </button>
         </div>
       </Container>
     </>
@@ -129,3 +172,6 @@ const Services = () => {
 };
 
 export default Services;
+// Array(totalPage).fill(0)
+// [...Array(totalPage).keys()]
+// [...Array(totalPage).fill(0)]
