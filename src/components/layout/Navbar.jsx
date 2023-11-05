@@ -1,5 +1,5 @@
-import { NavLink } from 'react-router-dom';
-import useAuth from '../../hooks/useAuth';
+import { NavLink } from "react-router-dom";
+import useAuth from "../../hooks/useAuth";
 
 const Navbar = () => {
   const { user, logout } = useAuth();
@@ -34,7 +34,7 @@ const Navbar = () => {
           <NavLink
             to="/"
             className={({ isActive }) =>
-              isActive ? 'btn btn-primary btn-sm' : 'btn btn-ghost btn-sm'
+              isActive ? "btn btn-primary btn-sm" : "btn btn-ghost btn-sm"
             }
           >
             Home
@@ -42,7 +42,7 @@ const Navbar = () => {
           <NavLink
             to="/about"
             className={({ isActive }) =>
-              isActive ? 'btn btn-primary btn-sm' : 'btn btn-ghost btn-sm'
+              isActive ? "btn btn-primary btn-sm" : "btn btn-ghost btn-sm"
             }
           >
             About
@@ -50,7 +50,7 @@ const Navbar = () => {
           <NavLink
             to="/contact"
             className={({ isActive }) =>
-              isActive ? 'btn btn-primary btn-sm' : 'btn btn-ghost btn-sm'
+              isActive ? "btn btn-primary btn-sm" : "btn btn-ghost btn-sm"
             }
           >
             Contact
@@ -58,11 +58,22 @@ const Navbar = () => {
           <NavLink
             to="/services"
             className={({ isActive }) =>
-              isActive ? 'btn btn-primary btn-sm' : 'btn btn-ghost btn-sm'
+              isActive ? "btn btn-primary btn-sm" : "btn btn-ghost btn-sm"
             }
           >
             Services
           </NavLink>
+          {user?.email && (
+            <NavLink
+              to="/user/orders"
+              className={({ isActive }) =>
+                isActive ? "btn btn-primary btn-sm" : "btn btn-ghost btn-sm"
+              }
+            >
+              Bookings
+            </NavLink>
+          )}
+
           {user?.email ? (
             <div className="dropdown dropdown-end ">
               <label tabIndex={0} className="cursor-pointer">
@@ -101,7 +112,7 @@ const Navbar = () => {
             <NavLink
               to="/login"
               className={({ isActive }) =>
-                isActive ? 'btn btn-primary btn-sm' : 'btn btn-ghost btn-sm'
+                isActive ? "btn btn-primary btn-sm" : "btn btn-ghost btn-sm"
               }
             >
               Login
