@@ -19,13 +19,13 @@ const Services = () => {
   const [price, setPrice] = useState("");
   const [category, setCategory] = useState("");
   const [page, setPage] = useState(1);
-  const limit = 9;
+  const limit = 6;
 
   // console.log(category);
   // console.log(price);
   const getServices = async () => {
     const res = await axios.get(
-      `/services?sortField=price&sortOrder=${price}&category=${category}`
+      `/services?sortField=price&sortOrder=${price}&category=${category}&page=${page}&limit=${limit}`
     );
     return res;
   };
@@ -39,7 +39,7 @@ const Services = () => {
     isError,
     refetch,
   } = useQuery({
-    queryKey: ["service", price, category], //eta somehow dependency hisabe kaj kore price/category change hole refetch hbe
+    queryKey: ["service", price, category,page], //eta somehow dependency hisabe kaj kore price/category/page change hole refetch hbe
     queryFn: getServices, //data jeta fetch kore anbe
     /*  queryFn:()=>{
       return axios.get("/services");
@@ -63,7 +63,7 @@ const Services = () => {
   const handleNext = () => {
     page < totalPage && setPage(page + 1);
   };
-  console.log(page);
+  // console.log(page);
 
   // console.log(totalPage);
   return (
