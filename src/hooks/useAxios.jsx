@@ -8,8 +8,8 @@ import { useNavigate } from "react-router-dom";
 // othoba token edit korleo prob hote ppare
 
 const instance = axios.create({
-  baseURL: "http://localhost:5000/api/v1",
-  // baseURL: "https://clean-co-server-live.vercel.app/api/v1",
+  // baseURL: "http://localhost:5000/api/v1",
+  baseURL: "https://clean-co-server-live.vercel.app/api/v1",
   withCredentials: true,
 });
 
